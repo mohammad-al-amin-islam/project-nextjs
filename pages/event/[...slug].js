@@ -5,6 +5,7 @@ import ResultsTitle from "@/components/events/ResultTitles";
 import { getFilteredEvents } from "@/helper-firebase-db/helper-fd";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import Head from "next/head";
 
 function FilteredEventsPage({ isErorr, events, dates }) {
   const router = useRouter();
@@ -34,12 +35,22 @@ function FilteredEventsPage({ isErorr, events, dates }) {
   if (!filterData || !loadedData) {
     return <p className="center">Loading...</p>;
   }
-  
+
   const filteredYear = filterData[0];
   const filteredMonth = filterData[1];
 
   const numYear = +filteredYear;
   const numMonth = +filteredMonth;
+
+  const pageHeadData = (
+    <Head>
+      <title>Filter events</title>
+      <meta
+        name="description"
+        content={`This is for date ${numYear}/${numMonth}`}
+      ></meta>
+    </Head>
+  );
 
   if (
     isNaN(numYear) ||
@@ -52,6 +63,7 @@ function FilteredEventsPage({ isErorr, events, dates }) {
   ) {
     return (
       <Fragment>
+        {pageHeadData}
         <p>Invalid filter. Please adjust your values!</p>
         <div className="center">
           <Button link="/event">Show All Events</Button>
@@ -82,19 +94,24 @@ function FilteredEventsPage({ isErorr, events, dates }) {
   // const filteredEvents = events;
 
   if (!filteredEvents || filteredEvents.length === 0) {
-    return <p className="center">No event found for the given filter</p>;
+    return (
+      <>
+        {pageHeadData}
+        <p className="center">No event found for the given filter</p>
+      </>
+    );
   }
   // const date = new Date(dates.year, dates.month - 1);
   const date = new Date(numYear, numMonth - 1);
 
   return (
     <Fragment>
+      {pageHeadData}
       <ResultsTitle date={date}></ResultsTitle>
       <EventList items={filteredEvents} />
     </Fragment>
   );
 }
-
 
 //server side data fetching
 
