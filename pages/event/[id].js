@@ -4,7 +4,7 @@ import Head from "next/head";
 import EventSummary from "../../components/event-detail/event-summary";
 import EventLogistics from "../../components/event-detail/event-logistics";
 import EventContent from "../../components/event-detail/event-content";
-import { getData, getEventById } from "@/helper-firebase-db/helper-fd";
+import {  getEventById, getFeaturedEvents } from "@/helper-firebase-db/helper-fd";
 
 function EventDetailPage({ event }) {
   if (!event) {
@@ -37,23 +37,23 @@ function EventDetailPage({ event }) {
 
 export async function getStaticProps(context) {
   const id = context.params.id;
-  console.log(id);
   const filterData = await getEventById(id);
 
   return {
     props: {
       event: filterData,
     },
+    revalidate:60
   };
 }
 
 export async function getStaticPaths() {
-  const allData = await getData();
+  const allData = await getFeaturedEvents();
   const readyParams = allData.map((data) => ({ params: { id: data.id } }));
 
   return{
     paths:readyParams,
-    fallback:false
+    fallback:"blocking"
   }
 }
 

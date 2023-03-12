@@ -20,8 +20,21 @@ export async function getFeaturedEvents() {
   return data.filter((event) => event.isFeatured);
 }
 
-
 export async function getEventById(id) {
-    const data = await getData();
-    return data.find((event) => event.id === id);
-  }
+  const data = await getData();
+  return data.find((event) => event.id === id);
+}
+
+export async function getFilteredEvents(dateFilter) {
+  const data = await getData();
+  const { year, month } = dateFilter;
+
+  let filteredEvents = data.filter((event) => {
+    const eventDate = new Date(event.date);
+    return (
+      eventDate.getFullYear() === year && eventDate.getMonth() === month - 1
+    );
+  });
+
+  return filteredEvents;
+}
