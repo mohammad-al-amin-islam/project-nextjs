@@ -8,31 +8,28 @@ import useSWR from "swr";
 import Head from "next/head";
 
 function FilteredEventsPage({ isErorr, events, dates }) {
+  const [loadedData, setLoadedData] = useState([]);
   const router = useRouter();
   const filterData = router.query.slug;
-  const [loadedData, setLoadedData] = useState([]);
 
   //client data fetching
   const { data, error } = useSWR(
     "https://nextjs-e5c88-default-rtdb.firebaseio.com/events.json",
-    (url) =>
-      fetch(url).then((res) =>
-        res.json().then((data) => {
-          const filteredDatas = [];
-          for (const key in data) {
-            filteredDatas.push({
-              id: key,
-              ...data[key],
-            });
-          }
-          setLoadedData(filteredDatas);
-        })
-      )
+    (url) => fetch(url).then((res) => res.json())
   );
 
-  useEffect(() => {}, [data]);
+  useEffect(() => {
+    const filteredDatas = [];
+    for (const key in data) {
+      filteredDatas.push({
+        id: key,
+        ...data[key],
+      });
+    }
+    setLoadedData(filteredDatas);
+  }, [data]);
 
-  if (!filterData || !loadedData) {
+  if (!data) {
     return <p className="center">Loading...</p>;
   }
 

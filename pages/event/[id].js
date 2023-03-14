@@ -5,6 +5,7 @@ import EventSummary from "../../components/event-detail/event-summary";
 import EventLogistics from "../../components/event-detail/event-logistics";
 import EventContent from "../../components/event-detail/event-content";
 import {  getEventById, getFeaturedEvents } from "@/helper-firebase-db/helper-fd";
+import Comments from "@/components/input/comments";
 
 function EventDetailPage({ event }) {
   if (!event) {
@@ -31,6 +32,7 @@ function EventDetailPage({ event }) {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
+      <Comments id={event.id}></Comments>
     </Fragment>
   );
 }
