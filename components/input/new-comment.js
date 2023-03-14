@@ -27,12 +27,13 @@ function NewComment(props) {
       setIsInvalid(true);
       return;
     }
-
-    props.onAddComment({
+    const data ={
       email: enteredEmail,
       name: enteredName,
       text: enteredComment,
-    });
+    }
+
+    props.onAddComment(data,event);
   }
 
   return (

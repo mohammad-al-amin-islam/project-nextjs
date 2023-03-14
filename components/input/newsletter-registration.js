@@ -1,5 +1,7 @@
 import { useRef } from "react";
+import { toast } from "react-toastify";
 import classes from "./newsletter-registration.module.css";
+import 'react-toastify/dist/ReactToastify.css'
 
 function NewsletterRegistration() {
   const emailRef = useRef();
@@ -8,7 +10,6 @@ function NewsletterRegistration() {
 
     // fetch user input (state or refs)
     const email = emailRef.current.value;
-    console.log(email);
     // send valid data to API
     const data = {
       email: email,
@@ -21,7 +22,11 @@ function NewsletterRegistration() {
       },
     })
       .then((res) => res.json())
-      .then((data) => console.log(data))
+      .then((data) => {
+        event.target.reset();
+        console.log(data);
+        toast.success("Email added successfully")
+      })
   }
 
   return (
