@@ -11,11 +11,18 @@ function Comments(props) {
 
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
+  // const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/comments/${id}`)
+    
+      // setIsFetching(true)
+      fetch(`/api/comments/${id}`)
       .then((response) => response.json())
-      .then((data) => setComments(data.comments));
+      .then((data) => {
+        // setIsFetching(false);
+        setComments(data.comments)
+      });
+   
   }, [showComments,comments]);
 
   function toggleCommentsHandler() {
@@ -34,7 +41,7 @@ function Comments(props) {
       .then((data) => {
         event.target.reset();
         console.log(data);
-        toast.success("Email added successfully")
+        toast.success("Comments added successfully")
       });
   }
 
@@ -45,6 +52,7 @@ function Comments(props) {
       </button>
       {showComments && <NewComment onAddComment={addCommentHandler} />}
       {showComments && <CommentList items={comments} />}
+      {/* {showComments && isFetching && <p>Loading...</p>} */}
     </section>
   );
 }
